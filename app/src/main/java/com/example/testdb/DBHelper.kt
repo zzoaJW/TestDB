@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper
 
 class DBHelper(context: Context?, version: Int) : SQLiteOpenHelper(context, DATABASE_NAME, null, version) {
 
+    val dbWrite = writableDatabase
+
     // Person Table 생성
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL("CREATE TABLE Person(name TEXT, Age INT, ADDR TEXT)")
@@ -20,42 +22,34 @@ class DBHelper(context: Context?, version: Int) : SQLiteOpenHelper(context, DATA
 
     // Person Table 데이터 입력
     fun insert(name: String, age: Int, Addr: String) {
-        val db = writableDatabase
-        db.execSQL("INSERT INTO Person VALUES('$name', $age, '$Addr')")
-        db.close()
+        dbWrite.execSQL("INSERT INTO Person VALUES('$name', $age, '$Addr')")
+        dbWrite.close()
     }
 
     // Person Table 데이터 수정
     fun Update(name: String, age: Int, Addr: String) {
-        val db = writableDatabase
-        db.execSQL("UPDATE Person SET age = $age, ADDR = '$Addr' WHERE NAME = '$name'")
-        db.close()
+        dbWrite.execSQL("UPDATE Person SET age = $age, ADDR = '$Addr' WHERE NAME = '$name'")
+        dbWrite.close()
     }
 
     // Person Table 데이터 삭제
     fun Delete(name: String) {
-        val db = writableDatabase
-        db.execSQL("DELETE Person WHERE NAME = '$name'")
-        db.close()
+        dbWrite.execSQL("DELETE Person WHERE NAME = '$name'")
+        dbWrite.close()
     }// 읽기가 가능하게 DB 열기
 
     // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 테이블에 있는 모든 데이터 출력
     // Person Table 조회
     val result: String
         get() {
+            val dbRead = readableDatabase
             // 읽기가 가능하게 DB 열기
-            val db = readableDatabase
             var result = ""
 
             // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 테이블에 있는 모든 데이터 출력
-            val cursor = db.rawQuery("SELECT * FROM Person", null)
+            val cursor = dbRead.rawQuery("SELECT * FROM Person", null)
             while (cursor.moveToNext()) {
-                result += """ 이름 : ${cursor.getString(0)}, 나이 : ${cursor.getInt(1)}, 주소 : ${
-                    cursor.getString(
-                        2
-                    )
-                }
-"""
+                result += " 이름 : ${cursor.getString(0)}, 나이 : ${cursor.getInt(1)}, 주소 : ${cursor.getString(2)}\n"
             }
             return result
         }
