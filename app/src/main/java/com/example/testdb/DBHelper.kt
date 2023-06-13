@@ -40,16 +40,17 @@ class DBHelper(context: Context?, version: Int) : SQLiteOpenHelper(context, DATA
 
     // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 테이블에 있는 모든 데이터 출력
     // Person Table 조회
-    val result: String
+    val result: ArrayList<ArrayList<Any>>
         get() {
             val dbRead = readableDatabase
             // 읽기가 가능하게 DB 열기
-            var result = ""
+            var result = ArrayList<ArrayList<Any>>()
 
             // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 테이블에 있는 모든 데이터 출력
             val cursor = dbRead.rawQuery("SELECT * FROM Person", null)
+
             while (cursor.moveToNext()) {
-                result += " 이름 : ${cursor.getString(0)}, 나이 : ${cursor.getInt(1)}, 주소 : ${cursor.getString(2)}\n"
+                result.add(arrayListOf(cursor.getString(0), cursor.getInt(1), cursor.getString(2)))
             }
             return result
         }

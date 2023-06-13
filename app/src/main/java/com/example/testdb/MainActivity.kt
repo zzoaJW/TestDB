@@ -20,9 +20,19 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnSelect.setOnClickListener {
-            binding.resultSelect.text = dbHelper.result
+            binding.resultSelect.text = getFormattedResult(dbHelper.result)
         }
 
 
+    }
+
+    fun getFormattedResult(result : ArrayList<ArrayList<Any>>): String{
+        var formattedResult = ""
+
+        result.forEach {
+            formattedResult += " 이름 : ${it[0]}, 나이 : ${it[1]}, 주소 : ${it[2]}\n"
+        }
+
+        return formattedResult
     }
 }
