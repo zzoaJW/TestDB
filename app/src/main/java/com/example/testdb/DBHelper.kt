@@ -14,7 +14,7 @@ class DBHelper(context: Context?, version: Int) : SQLiteOpenHelper(context, DATA
         db.execSQL("CREATE TABLE Person(name TEXT, Age INT, ADDR TEXT)")
     }
 
-    // Person Table Upgrade
+    // Person Table 삭제
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL("DROP TABLE IF EXISTS Person")
         onCreate(db)
@@ -32,18 +32,17 @@ class DBHelper(context: Context?, version: Int) : SQLiteOpenHelper(context, DATA
         dbWrite.close()
     }
 
-    // Person Table 데이터 삭제
+    // Person Table 데이터만 삭제 (Table은 유지)
     fun Delete(name: String) {
         dbWrite.execSQL("DELETE Person WHERE NAME = '$name'")
         dbWrite.close()
-    }// 읽기가 가능하게 DB 열기
+    }
 
-    // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 테이블에 있는 모든 데이터 출력
     // Person Table 조회
     val result: ArrayList<ArrayList<Any>>
         get() {
             val dbRead = readableDatabase
-            // 읽기가 가능하게 DB 열기
+
             var result = ArrayList<ArrayList<Any>>()
 
             // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 테이블에 있는 모든 데이터 출력
